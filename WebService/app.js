@@ -37,6 +37,10 @@ app.get('/', (req, res) => {
     res.render(specificViewPath);
 });
 
+app.get('/codici', (req, res) => {
+  res.render(specificViewPath);
+});
+
 app.post('/login/log', express.json(), (req, res) => {
 });
 
