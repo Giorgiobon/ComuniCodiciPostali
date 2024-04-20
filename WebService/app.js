@@ -37,12 +37,11 @@ app.get('/', (req, res) => {
     res.render(specificViewPath);
 });
 
-app.post('/codice', (req, res) => {
-  const {comune} = req.body;
-  console.log(comune);
-  const query = 'SELECT Comune, CAP FROM CodiciPostali WHERE Comune = ?';
-  /*database.query(query, [comune], (error, result) =>{
-    if (err) {
+app.post('/cerca', (req, res) => {
+  const {comune, cap} = req.body;
+  const query = 'SELECT COMUNE, CAP FROM CodiciPostali WHERE COMUNE = ? OR CAP = ?';
+  database.query(query, [comune, cap], (error, result) =>{
+    if (error) {
       console.error('Errore nella query:', err);
       res.status(500).send('Errore del server');
     } else {
@@ -53,13 +52,40 @@ app.post('/codice', (req, res) => {
       }));
       res.json(comuni);
     }
-  });*/  
+  }); 
 });
 
-app.post('/login/log', express.json(), (req, res) => {
+app.post('/aggiungi', express.json(), (req, res) => {
+  const {comuneName, comuneCap} = req.body;
+  const query = 'INSERT INTO CodiciPostali (COMUNE, CAP) VALUES ( ?, ?)';
+  database.query(query, [comuneName, comuneCap], (error, result) =>{
+    if (error) {
+      console.error('Errore nella query:', err);
+      res.status(500).send('Errore del server');
+    }
+  }); 
 });
 
-app.delete('/deleteCampaign', (req, res) => {
+app.post('/modifica', express.json(), (req, res) => {
+  const {comuneName, comuneCap, nuovoNomeComune, nuovoCapComune} = req.body;
+  const query = 'UPDATE CodiciPostali SET COMUNE = ? , CAP = ?  WHERE COMUNE = ? OR CAP = ?';
+  database.query(query, [comuneName, comuneCap, nuovoNomeComune, nuovoCapComune], (error, result) =>{
+    if (error) {
+      console.error('Errore nella query:', err);
+      res.status(500).send('Errore del server');
+    }
+  }); 
+});
+
+app.delete('/elemina', (req, res) => {
+  const { comuneName, comuneCap } = req.body;
+  const query = 'DELETE FROM CodiciPostali WHERE COMUNE = ? AND CAP = ?';
+  database.query(query, [ comuneName, comuneCap ], (error, result) =>{
+    if (error) {
+      console.error('Errore nella query:', err);
+      res.status(500).send('Errore del server');
+    }
+  }); 
 });
 
 export default app;

@@ -10,30 +10,37 @@ html
   body
     h1 Comuni Codici Postali BELLI!!!!
         p 
+            input(type="text", name="nomeComune1", placeholder="Inserisci nome comune")
+            input(type="text", name="capComune1", placeholder="Inserisci cap comune")
             button(onclick="Cerca()") Cerca comune
-            input(type="text", name="nomeComune")
         p
-            button(onclick="function2()") Funzione 2
+            input(type="text", name="nuovoNomeComune1", placeholder="Inserisci nuovo nome comune")
+            input(type="text", name="nuovoCapComune1", placeholder="Inserisci nuovo cap comune")
+            button(onclick="Aggiungi()") Aggiungi comune
         p
-            button(onclick="function3()") Funzione 3
+            input(type="text", name="nomeComune2", placeholder="Inserisci nome comune")
+            input(type="text", name="capComune2", placeholder="Inserisci cap comune")
+            input(type="text", name="nuovoNomeComune2", placeholder="Inserisci nuovo nome comune")
+            input(type="text", name="nuovoCapComune2", placeholder="Inserisci nuovo cap comune")
+            button(onclick="Modifica()") Modifica comune
         p
-            button(onclick="function4()") Funzione 4
+            input(type="text", name="nomeComune3", placeholder="Inserisci nome comune")
+            input(type="text", name="capComune3", placeholder="Inserisci cap comune")
+            button(onclick="Elimina()") Elimina comune
 
     .div-container
         div(id="div1" name="div1") 
-        div(id="div2" name="div2") 
-        div(id="div3" name="div3") 
-        div(id="div4" name="div4") 
 
     script.
-        async function Cerca() {
-            const comuneName = document.querySelector("input[name='nomeComune']").value;
-            const res = await fetch('/codice', {
+        function Cerca() {
+            const comuneName = document.querySelector("input[name='nomeComune1']").value;
+            const capComune = document.querySelector("input[name='capComune1']").value;
+            fetch('/cerca', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ comuneName }),
+                body: JSON.stringify({ comuneName, capComune }),
             }).then(response => response.json())
                 .then(data => {
                     console.log(data);
@@ -43,4 +50,42 @@ html
                     });
                 })
                 .catch(error => console.error('Errore nel recupero delle categorie:', error));
+        }
+
+        function Aggiungi() {
+            const nuovoNomeComune = document.querySelector("input[name='nuovoNomeComune1']").value;
+            const nuovoCapComune = document.querySelector("input[name='nuovoCapComune1']").value;
+            fetch('/aggiungi', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ nuovoNomeComune, nuovoCapComune })
+            })
+        }
+
+        function Modifica() {
+            const comuneName = document.querySelector("input[name='nomeComune2']").value;
+            const comuneCap = document.querySelector("input[name='capComune2']").value;
+            const nuovoNomeComune = document.querySelector("input[name='nuovoNomeComune2']").value;
+            const nuovoCapComune = document.querySelector("input[name='nuovoCapComune2']").value;
+            fetch('/modifica', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ comuneName, comuneCap, nuovoNomeComune, nuovoCapComune })
+            })
+        }
+
+        function Elimina() {
+            const comuneName = document.querySelector("input[name='nomeComune3']").value;
+            const comuneCap = document.querySelector("input[name='capComune3']").value;
+            fetch('/elemina', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ comuneName, comuneCap })
+            })
         }
