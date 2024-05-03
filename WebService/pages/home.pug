@@ -40,16 +40,16 @@ html
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ comuneName, capComune }),
+                body: JSON.stringify({ comuneName, capComune })
             }).then(response => response.json())
-                .then(data => {
-                    console.log(data);
+                .then(comuni => {
+                    console.log(comuni);
                     const select = document.querySelector('div[id="div1"]');
-                    data.comuni.forEach(comune => {
+                    comuni.forEach(comune => {
                         select.textContent += `comune: ${comune.comune} e cap: ${comune.cap}` + '\n';
                     });
                 })
-                .catch(error => console.error('Errore nel recupero delle categorie:', error));
+                    .catch(error => console.error('Errore', error));
         }
 
         function Aggiungi() {
@@ -62,6 +62,8 @@ html
                 },
                 body: JSON.stringify({ nuovoNomeComune, nuovoCapComune })
             })
+                .catch(error => console.error('Errore', error));
+
         }
 
         function Modifica() {
@@ -69,6 +71,7 @@ html
             const comuneCap = document.querySelector("input[name='capComune2']").value;
             const nuovoNomeComune = document.querySelector("input[name='nuovoNomeComune2']").value;
             const nuovoCapComune = document.querySelector("input[name='nuovoCapComune2']").value;
+            console.log(comuneName, comuneCap, nuovoNomeComune, nuovoCapComune);
             fetch('/modifica', {
                 method: 'POST',
                 headers: {
@@ -76,16 +79,18 @@ html
                 },
                 body: JSON.stringify({ comuneName, comuneCap, nuovoNomeComune, nuovoCapComune })
             })
+                .catch(error => console.error('Errore', error));
         }
 
         function Elimina() {
             const comuneName = document.querySelector("input[name='nomeComune3']").value;
             const comuneCap = document.querySelector("input[name='capComune3']").value;
-            fetch('/elemina', {
+            fetch('/elimina', {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ comuneName, comuneCap })
             })
+                .catch(error => console.error('Errore', error));
         }
